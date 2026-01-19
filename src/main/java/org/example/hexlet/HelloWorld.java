@@ -2,12 +2,15 @@ package org.example.hexlet;
 
 import io.javalin.Javalin;
 import io.javalin.http.NotFoundResponse;
+import io.javalin.rendering.template.JavalinJte;
 
 public class HelloWorld {
     public static void main(String[] args) {
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
+            config.fileRenderer(new JavalinJte());
         });
+        app.get("/", ctx -> ctx.render("index.jte"));
         app.get("/hello", ctx -> {
             var name = ctx.queryParamAsClass("name", String.class).getOrDefault("World");
             ctx.contentType("text/html");
